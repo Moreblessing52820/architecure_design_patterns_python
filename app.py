@@ -4,7 +4,8 @@ import urllib.request
 from datetime import datetime, timedelta
 
 from flask import Flask, jsonify, request
-from decorators.request_log import request_log, REQUESTS
+from decorators.request_log import request_log
+from singleton.requests import Requests
 
 app = Flask(__name__)
 
@@ -214,15 +215,16 @@ def list_notices():
 @app.route("/stats", methods=["GET"])
 @request_log
 def stats():
+    requests = Requests.get_instance()
+
     print("got a stats request")
     return jsonify(
         {
-            "count": REQUESTS.count,
-            "last_path": REQUESTS.last_path,
-            "last_seconds": REQUESTS.last_seconds,
+            "count": requests.count,
+            "last_path": requests.last_path,
+            "last_seconds": requests.last_seconds,
         }
     )
-
 
 @app.route("/activities", methods=["GET"])
 @request_log

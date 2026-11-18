@@ -20,53 +20,20 @@ Together, this is a small activity log that connects what you did with what you 
 
 This is the as-is picture. Update it when a refactor moves a responsibility out of `app.py`.
 
-
 ```mermaid
 flowchart TB
-    client[HTTP client]
+    client[HTTP client] --> wrapper["request_log decorator"]
+    wrapper --> counter["Requests Singleton"]
 
-    client --> get_activities["GET /activities"]
-    client --> post_activities["POST /activities"]
-    client --> post_log["POST /log"]
-    client --> undo["POST /log/undo"]
-    client --> get_notices["GET /notices"]
-    client --> get_calories["GET /calories"]
-    client --> post_user["POST /user"]
-    client --> stats["GET /stats"]
-    client --> targets["GET /targets"]
+    wrapper --> stats[GET /stats]
+    stats --> counter
 
-    get_activities --> activities[(activities.json)]
-    post_activities --> activities
-
-    post_log --> activities
-    post_log --> logs[(logs.json)]
-    post_log --> notices[(notices.json)]
-
-    undo --> logs
-    get_notices --> notices
-
-    get_calories --> logs
-    get_calories --> activities
-
-    post_user --> user[(user.json)]
-
-    targets --> user
-    targets --> logs
-    targets --> activities
-    targets --> lifestyle[LIFESTYLE_ACTIVITY]
-    lifestyle --> api_names[ACTIVITY_FOR_API]
-    api_names --> macros[macros API]
-
-    timing[timing block + REQUESTS]
-    timing -.-> get_activities
-    timing -.-> post_activities
-    timing -.-> post_log
-    timing -.-> undo
-    timing -.-> get_notices
-    timing -.-> get_calories
-    timing -.-> post_user
-    timing -.-> stats
-    timing -.-> targets
+    wrapper --> targets[GET /targets]
+    targets --> logs[(logs.json)]
+    targets --> user[(user.json)]
+    targets --> LIFESTYLE_ACTIVITY
+    LIFESTYLE_ACTIVITY --> ACTIVITY_FOR_API
+    ACTIVITY_FOR_API --> macros[macros API]
 ```
 
 ## What it does
