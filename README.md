@@ -18,7 +18,7 @@ Together, this is a small activity log that connects what you did with what you 
 
 ## Current architecture
 
-This is the as-is picture. Update it when a refactor moves a responsibility out of `app.py`.
+This diagram shows how request logging and request statistics are handled using the Decorator and Singleton patterns
 
 ```mermaid
 flowchart TB
